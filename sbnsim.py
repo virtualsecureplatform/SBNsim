@@ -3,11 +3,11 @@
 import numpy as np
 from random import randint
 
-# MAX = 4
-# data = [randint(0,MAX-1) for i in range(MAX)]
-# print(data)
+MAX = 10
+data = [randint(0,MAX-1) for i in range(MAX)]
+print(data)
 
-data = [1, 0, 2, 1]
+# data = [1, 0, 2, 1]
 # data = np.array([3,5,8,7,2,4,9,0,1,6])
 # data = np.array([9,1,6,0])
 RAM = np.zeros(512,dtype=np.int32)
@@ -60,15 +60,19 @@ RAM[Regstart] = start
 
 # Labels
 SOP = 0
-QS = 9
-while1 = 14
-while2 = 19
-wend2 = 26
-while3 = 29
-wend3 = 34
-endif = 44
-wend1 = 45
+while1 = 12
+while2 = 16
+wend2 = 23
+while3 = 26
+wend3 = 31
+endif = 41
+wend1 = 42
 EOP = 512
+
+
+
+
+
 
 
 
@@ -79,24 +83,21 @@ ROM = [
 [itemp,Reg0,temp,null,False,False,False],
 [itemp,Reginv1,temp1,null,False,False,False],
 [temp,Reg0,first,null,True,False,False],
-[temp,Reg0,pivot,null,True,False,False],
 [temp1,Reg0,last,null,True,False,False],
 [last,Reg1,itemp,null,False,False,False],
-[itemp,first,temp,SOP,False,False,False],#QS
-[first,Reg0,pivot,null,False,False,False],
-[first,Reg0,pivot,null,False,False,False],
-[first,Reg0,i,null,False,False,False],
-[last,Reg0,j,null,False,False,False],
-[i,Reginv1,itemp,null,False,False,False],#while1
+[itemp,first,temp,SOP,False,False,False],#QS if(first<last){
+[first,Reg0,pivot,null,False,False,False],#int pivot = first;
+[first,Reg0,i,null,False,False,False],#int i = first;
+[last,Reg0,j,null,False,False,False],#int j  = last;
+[i,Reginv1,itemp,null,False,False,False],#while1 while(i<j){
 [j,itemp,temp,wend1,False,False,False],
 [Reg0,pivot,jtemp,null,False,False,False],
-[Regstart,jtemp,temp1,null,False,False,False],
-[temp1,Reginv1,jtemp,null,True,False,False],
-[Reg0,i,itemp,null,False,False,False],#while2
-[Regstart,itemp,temp,null,False,False,False],
-[jtemp,temp,accumlator,wend2,False,True,False],
-[i,Reginv1,itemp,null,False,False,False],
-[last,itemp,product,wend2,False,False,False],
+[Regstart,jtemp,temp1,null,False,False,False],# temp1 = &x[pivot]
+[Reg0,i,itemp,null,False,False,False],#while2 while(x[i] <= x[pivot] && i<last)
+[Regstart,itemp,temp,null,False,False,False],# temp = &x[i]
+[temp1,temp,accumlator,wend2,True,True,False],# x[pivot] - x[i] >=0 ⇔ x[pivot] >= x[i]
+[i,Reginv1,itemp,null,False,False,False], # itemp  = i+1
+[last,itemp,product,wend2,False,False,False],# last - (i+1)>=0 ⇔ i<last
 [i,Reginv1,i,null,False,False,False],#Deled Moded
 [Reg0,Reg1,PC,while2,False,False,False],
 [Reg0,pivot,jtemp,null,False,False,False],#Deled wend2
@@ -161,11 +162,11 @@ def sbn(A,B,resultant,C,flagA,flagB,flagresultant):
 
 cycle = 0
 while RAM[PC]!=EOP:
-    print([RAM[PC],RAM[first],RAM[last],RAM[temp],RAM[temp1]])
+    print([RAM[PC],RAM[first],RAM[last]])
     inst = ROM[RAM[PC]]
     sbn(*inst)
     cycle+=1
-    print(RAM[start:start+len(data)])
+    # print(RAM[start:start+len(data)])
 
 print(RAM[start:start+len(data)])
 print(cycle)
