@@ -1,9 +1,14 @@
 #!/bin/python3
 
-import csv
 import numpy as np
+from random import randint
 
-data = np.array([3,5,8,7,2,4,9,0,1,6])
+# MAX = 4
+# data = [randint(0,MAX-1) for i in range(MAX)]
+# print(data)
+
+data = [1, 0, 2, 1]
+# data = np.array([3,5,8,7,2,4,9,0,1,6])
 # data = np.array([9,1,6,0])
 RAM = np.zeros(512,dtype=np.int32)
 null = -1
@@ -122,7 +127,7 @@ ROM = [
 [temp,Reg0,jtemp,null,True,False,False],
 [temp1,Reg0,mem_tempi,null,True,False,True],
 [jtemp,Reg0,mem_tempj,null,False,False,True],
-[Reg0,stack,itemp,null,False,False,False],
+[Reg0,stack,itemp,null,False,False,False], #push
 [Regbase,itemp,itemp,null,False,False,False],
 [itemp,Reg0,mem_tempi,null,False,False,False],
 [itemp,Reginv1,mem_tempj,null,False,False,False],
@@ -156,10 +161,11 @@ def sbn(A,B,resultant,C,flagA,flagB,flagresultant):
 
 cycle = 0
 while RAM[PC]!=EOP:
-    #print([RAM[PC],RAM[stack],RAM[jtemp]])
+    print([RAM[PC],RAM[first],RAM[last],RAM[temp],RAM[temp1]])
     inst = ROM[RAM[PC]]
     sbn(*inst)
     cycle+=1
+    print(RAM[start:start+len(data)])
 
 print(RAM[start:start+len(data)])
 print(cycle)
