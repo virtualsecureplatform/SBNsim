@@ -5,7 +5,7 @@ from random import randint
 
 MAX = 10
 data = [randint(0,MAX-1) for i in range(MAX)]
-print(data)
+print(str(data).replace(",","")[1:-2])
 
 # data = [1, 0, 2, 1]
 # data = np.array([3,5,8,7,2,4,9,0,1,6])
@@ -162,11 +162,11 @@ def sbn(A,B,resultant,C,flagA,flagB,flagresultant):
 
 cycle = 0
 while RAM[PC]!=EOP:
-    print([RAM[PC],RAM[first],RAM[last]])
+    # print([RAM[PC],RAM[first],RAM[last]])
     inst = ROM[RAM[PC]]
     sbn(*inst)
     cycle+=1
     # print(RAM[start:start+len(data)])
 
-print(RAM[start:start+len(data)])
+# print(RAM[start:start+len(data)])
 print(cycle)
